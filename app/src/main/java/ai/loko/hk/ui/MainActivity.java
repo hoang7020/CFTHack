@@ -64,10 +64,13 @@ import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import java.io.File;
 import java.io.IOException;
 
+import javax.security.auth.login.LoginException;
+
 import ai.loko.hk.ui.activities.ProfileActivity;
 import ai.loko.hk.ui.activities.SettingsActivity;
 import ai.loko.hk.ui.constants.Constant;
 import ai.loko.hk.ui.data.Data;
+import ai.loko.hk.ui.discord.DiscordBot;
 import ai.loko.hk.ui.services.Floating;
 import ai.loko.hk.ui.services.OCRFloating;
 import ai.loko.hk.ui.services.option4.OCRFloating4;
@@ -145,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         givePermission();
-
-
     }
 
     private void checkForUpdates() {

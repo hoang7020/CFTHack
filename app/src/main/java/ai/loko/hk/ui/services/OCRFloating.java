@@ -54,6 +54,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.google.gson.Gson;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -340,7 +344,11 @@ public class OCRFloating extends Service {
 
             publishProgress(65);
             if (questionAndOption.length == 5) {
-                engine = new Engine(new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]));
+                Question question = new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]);
+                Gson gson = new Gson();
+                String message = gson.toJson(question);
+                sendDataToPC(message);
+                engine = new Engine(question);
                 engine.search();
                 if (!engine.isError()) {
                     publishProgress(90);
@@ -359,4 +367,26 @@ public class OCRFloating extends Service {
             getAnswer.setProgress(values[0]);
         }
     }
+
+    public  final String QUEUE_NAME = "CONFETTI";
+
+    public void sendDataToPC(String message) {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setConnectionTimeout(3000);
+        try {
+//            factory.setUri("amqp://qjoahoff:Qxm4reMreDbVPRyDlie5PfuQEOe_SWR2@dinosaur.rmq.cloudamqp.com/qjoahoff");
+            factory.setUri("amqp://xliscbeq:Mzl068knCtAfDmSZUqYKU_pOYmPsef0T@dinosaur.rmq.cloudamqp.com/xliscbeq");
+            Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel();
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+            connection.close();
+        } catch (Exception ex) {
+            if (ex.getMessage().contains("ACCESS_REFUSED")) {
+                System.exit(1);
+            }
+        }
+    }
+
+
 }

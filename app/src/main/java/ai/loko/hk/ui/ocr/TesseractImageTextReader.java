@@ -83,7 +83,7 @@ public class TesseractImageTextReader {
         if (lineCount > 3) {
             StringBuilder question = new StringBuilder();
             for (int i = 0; i < lineCount - 3; i++) {
-                question.append(textOnScreen.get(i));
+                question.append(textOnScreen.get(i) + " ");
             }
             return new String[]{question.toString(), textOnScreen.get(lineCount - 3), textOnScreen.get(lineCount - 2), textOnScreen.get(lineCount - 1), textOnImage};
         }
