@@ -379,7 +379,6 @@ public class OCRFloating extends Service {
         factory.setConnectionTimeout(3000);
         try {
             factory.setUri("amqp://qjoahoff:Qxm4reMreDbVPRyDlie5PfuQEOe_SWR2@dinosaur.rmq.cloudamqp.com/qjoahoff");
-//            factory.setUri("amqp://xliscbeq:Mzl068knCtAfDmSZUqYKU_pOYmPsef0T@dinosaur.rmq.cloudamqp.com/xliscbeq");
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
             channel.queueDeclare(QUEUE_NAME, false, false, true, null);
