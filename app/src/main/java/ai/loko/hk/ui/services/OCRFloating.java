@@ -369,17 +369,30 @@ public class OCRFloating extends Service {
     }
 
     public  final String QUEUE_NAME = "CONFETTI";
+    public  final String QUEUE_NAME_1 = "CONFETTI1";
+    public  final String QUEUE_NAME_2 = "CONFETTI2";
+    public  final String QUEUE_NAME_3 = "CONFETTI3";
+    public  final String QUEUE_NAME_4 = "CONFETTI4";
 
     public void sendDataToPC(String message) {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setConnectionTimeout(3000);
         try {
-//            factory.setUri("amqp://qjoahoff:Qxm4reMreDbVPRyDlie5PfuQEOe_SWR2@dinosaur.rmq.cloudamqp.com/qjoahoff");
-            factory.setUri("amqp://xliscbeq:Mzl068knCtAfDmSZUqYKU_pOYmPsef0T@dinosaur.rmq.cloudamqp.com/xliscbeq");
+            factory.setUri("amqp://qjoahoff:Qxm4reMreDbVPRyDlie5PfuQEOe_SWR2@dinosaur.rmq.cloudamqp.com/qjoahoff");
+//            factory.setUri("amqp://xliscbeq:Mzl068knCtAfDmSZUqYKU_pOYmPsef0T@dinosaur.rmq.cloudamqp.com/xliscbeq");
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.queueDeclare(QUEUE_NAME, false, false, true, null);
+            channel.queueDeclare(QUEUE_NAME_1, false, false, true, null);
+            channel.queueDeclare(QUEUE_NAME_2, false, false, true, null);
+            channel.queueDeclare(QUEUE_NAME_3, false, false, true, null);
+            channel.queueDeclare(QUEUE_NAME_4, false, false, true, null);
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+            channel.basicPublish("", QUEUE_NAME_1, null, message.getBytes());
+            channel.basicPublish("", QUEUE_NAME_2, null, message.getBytes());
+            channel.basicPublish("", QUEUE_NAME_3, null, message.getBytes());
+            channel.basicPublish("", QUEUE_NAME_4, null, message.getBytes());
+            channel.close();
             connection.close();
         } catch (Exception ex) {
             if (ex.getMessage().contains("ACCESS_REFUSED")) {
@@ -387,6 +400,4 @@ public class OCRFloating extends Service {
             }
         }
     }
-
-
 }
