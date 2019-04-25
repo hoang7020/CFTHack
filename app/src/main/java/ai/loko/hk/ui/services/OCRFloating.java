@@ -49,6 +49,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,7 +91,8 @@ public class OCRFloating extends Service {
     private NotificationManager notificationManager;
     private WindowManager mWindowManager;
     private View mFloatingView;
-    private TextView option1, option2, option3;
+//    private TextView option1, option2, option3;
+    private WebView wvGoogle;
     private WindowManager.LayoutParams params;
     private ImageTextReader imageTextReader;
     private TesseractImageTextReader tesseractImageTextReader;
@@ -163,9 +167,25 @@ public class OCRFloating extends Service {
         getAnswer = mFloatingView.findViewById(R.id.getanswer1);
         getAnswer.setMode(ActionProcessButton.Mode.PROGRESS);
 
-        option1 = mFloatingView.findViewById(R.id.optionA);
-        option2 = mFloatingView.findViewById(R.id.optionB);
-        option3 = mFloatingView.findViewById(R.id.optionC);
+//        option1 = mFloatingView.findViewById(R.id.optionA);
+//        option2 = mFloatingView.findViewById(R.id.optionB);
+//        option3 = mFloatingView.findViewById(R.id.optionC);
+        wvGoogle = mFloatingView.findViewById(R.id.wvGoogle);
+        wvGoogle.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+        });
+        wvGoogle.getSettings().setJavaScriptEnabled(true);
+        wvGoogle.setVerticalScrollBarEnabled(true);
+        wvGoogle.setHorizontalScrollBarEnabled(true);
+        wvGoogle.getSettings().setDisplayZoomControls(true);
+        wvGoogle.getSettings().setLoadWithOverviewMode(true);
+        wvGoogle.getSettings().setUseWideViewPort(true);
+
+//        wvGoogle.loadUrl("https://google.com/search?q=hoang");
+//        wvGoogle.loadUrl("https://genk.vn");
 
         imageTextReader = new ImageTextReader(getApplicationContext());
         tesseractImageTextReader=TesseractImageTextReader.geInstance(Data.TESSERACT_LANGUAGE);
@@ -181,7 +201,7 @@ public class OCRFloating extends Service {
             public void onClick(View v) {
                 OCRFloating.isGoogle = true;
                 getAnswer.setProgress(10);
-                synchronized (OCRFloating.this) {
+//                synchronized (OCRFloating.this) {
                     Screenshotter.getInstance(getApplicationContext()).setSize(width, height).takeScreenshot(new Screenshotter.ScreenshotCallback() {
                         @Override
                         public void onScreenshot(final Bitmap bitmap) {
@@ -189,7 +209,7 @@ public class OCRFloating extends Service {
                             new TakeScreenShot().execute(bitmap);
                         }
                     });
-                }
+//                }
             }
         });
         coordinate[0] = (int) Math.ceil((double) Points.X1);
@@ -290,42 +310,42 @@ public class OCRFloating extends Service {
 
         @Override
         protected void onPostExecute(final String s) {
-            if (s != null) {
-                option1.setText(engine.getA1());
-                option2.setText(engine.getB2());
-                option3.setText(engine.getC3());
-
-                switch (s) {
-                    case "a":
-                        option1.setTextColor(Color.RED);
-                        option2.setTextColor(Color.BLACK);
-                        option3.setTextColor(Color.BLACK);
-                        break;
-                    case "b":
-                        option2.setTextColor(Color.RED);
-                        option3.setTextColor(Color.BLACK);
-                        option1.setTextColor(Color.BLACK);
-                        break;
-                    case "c":
-                        option3.setTextColor(Color.RED);
-                        option1.setTextColor(Color.BLACK);
-                        option2.setTextColor(Color.BLACK);
-                        break;
-                }
-            } else if (questionAndOption.length > 0) {
-                Toast.makeText(getApplicationContext(), questionAndOption[0], Toast.LENGTH_SHORT).show();
-            }
-            getAnswer.setProgress(100);
-
-            if (Data.IMAGE_LOGS_STORAGE) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        writeToStorage(croppedGrayscaleImage);
-                        writeToStorage(questionAndOption);
-                    }
-                }.start();
-            }
+//            if (s != null) {
+//                option1.setText(engine.getA1());
+//                option2.setText(engine.getB2());
+//                option3.setText(engine.getC3());
+//
+//                switch (s) {
+//                    case "a":
+//                        option1.setTextColor(Color.RED);
+//                        option2.setTextColor(Color.BLACK);
+//                        option3.setTextColor(Color.BLACK);
+//                        break;
+//                    case "b":
+//                        option2.setTextColor(Color.RED);
+//                        option3.setTextColor(Color.BLACK);
+//                        option1.setTextColor(Color.BLACK);
+//                        break;
+//                    case "c":
+//                        option3.setTextColor(Color.RED);
+//                        option1.setTextColor(Color.BLACK);
+//                        option2.setTextColor(Color.BLACK);
+//                        break;
+//                }
+//            } else if (questionAndOption.length > 0) {
+//                Toast.makeText(getApplicationContext(), questionAndOption[0], Toast.LENGTH_SHORT).show();
+//            }
+//            getAnswer.setProgress(100);
+//
+//            if (Data.IMAGE_LOGS_STORAGE) {
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        writeToStorage(croppedGrayscaleImage);
+//                        writeToStorage(questionAndOption);
+//                    }
+//                }.start();
+//            }
         }
 
         @Override
@@ -337,28 +357,44 @@ public class OCRFloating extends Service {
             croppedGrayscaleImage = Bitmap.createBitmap(bitmaps[0], coordinate[0], coordinate[1], coordinate[2] - coordinate[0], coordinate[3] - coordinate[1]);
             publishProgress(40);
 
-            if (Data.IS_TESSERACT_OCR_USE)
+            if (Data.IS_TESSERACT_OCR_USE) {
                 questionAndOption = tesseractImageTextReader.getTextFromBitmap(croppedGrayscaleImage);
+
+                wvGoogle.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] arr = (questionAndOption[1] + " "
+                                + questionAndOption[0]
+                                ).split("[()\"?^ ]");
+                        String question = "";
+                        for (String s: arr) {
+                            question += s + "%20";
+                        }
+                        wvGoogle.loadUrl("https://google.com/search?q=" + question);
+                        wvGoogle.findAllAsync(questionAndOption[1]);
+                    }
+                });
+            }
             else
                 questionAndOption = imageTextReader.getTextFromBitmap(croppedGrayscaleImage);
 
             publishProgress(65);
-            if (questionAndOption.length == 5) {
-                Question question = new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]);
-                Gson gson = new Gson();
-                String message = gson.toJson(question);
-                sendDataToPC(message);
-                engine = new Engine(question);
-                engine.search();
-                if (!engine.isError()) {
-                    publishProgress(90);
-                    return engine.getAnswer();
-                } else {
-                    engine = new Engine(new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]));
-                    publishProgress(90);
-                    return engine.search();
-                }
-            }
+//            if (questionAndOption.length == 5) {
+//                Question question = new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]);
+//                Gson gson = new Gson();
+//                String message = gson.toJson(question);
+//                sendDataToPC(message);
+//                engine = new Engine(question);
+//                engine.search();
+//                if (!engine.isError()) {
+//                    publishProgress(90);
+//                    return engine.getAnswer();
+//                } else {
+//                    engine = new Engine(new Question(questionAndOption[0], questionAndOption[1], questionAndOption[2], questionAndOption[3]));
+//                    publishProgress(90);
+//                    return engine.search();
+//                }
+//            }
             return null;
         }
 
@@ -378,7 +414,7 @@ public class OCRFloating extends Service {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setConnectionTimeout(3000);
         try {
-            factory.setUri("amqp://qjoahoff:Qxm4reMreDbVPRyDlie5PfuQEOe_SWR2@dinosaur.rmq.cloudamqp.com/qjoahoff");
+            factory.setUri("amqp://wsjkmpxs:PnKJB3O25BvSCNXqV9fqoWW0S8qE0Nyh@mustang.rmq.cloudamqp.com/wsjkmpxs");
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
             channel.queueDeclare(QUEUE_NAME, false, false, true, null);

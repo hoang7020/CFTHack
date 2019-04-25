@@ -61,57 +61,57 @@
             android:textSize="16sp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:padding="3dp">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/b"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/b"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold"/>-->
 
-        <TextView
-            android:id="@+id/optionB"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="3dp"
-            android:text="@string/option_b"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/optionB"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/option_b"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="16sp"/>-->
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:padding="3dp">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/c"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/c"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold"/>-->
 
-        <TextView
-            android:id="@+id/optionC"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="3dp"
-            android:text="@string/option_c"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/optionC"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/option_c"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="16sp"/>-->
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -179,6 +179,10 @@
 
 
     </LinearLayout>
+    <WebView
+        android:id="@+id/wvGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="700px"></WebView>
 
 
 </LinearLayout>

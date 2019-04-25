@@ -46,9 +46,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,11 +84,14 @@ import ui.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = MainActivity.class.getSimpleName();
+
     private final Handler mHandler = new Handler();
     SharedPreferences sharedPref;
     private Intent mFloatingIntent;
     private Button mOverlayPermmissionBtn, mAccessibilityPermissionBtn, startStopBtnLegacy, ocrBtn;
     private Button mOCRBtn4;
+    private RadioGroup rgSearchType;
 
 
     @Override
@@ -105,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
         ocrBtn = findViewById(R.id.ocr_btn5);
 
         mOCRBtn4=findViewById(R.id.ocr_btn5_4);
+        rgSearchType = findViewById(R.id.rgSearchType);
+        rgSearchType.check(1);
+        rgSearchType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+            }
+        });
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 

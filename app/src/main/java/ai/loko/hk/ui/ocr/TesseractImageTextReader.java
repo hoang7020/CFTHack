@@ -30,6 +30,7 @@ package ai.loko.hk.ui.ocr;
 
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -72,6 +73,7 @@ public class TesseractImageTextReader {
         }
 
         String[] textOnScreenArray = textOnImage.split("\n");
+        Log.d("TESSERACT", "getTextFromBitmap: " + textOnScreenArray);
         ArrayList<String> textOnScreen = new ArrayList<>();
 
         for (String s : textOnScreenArray) {
