@@ -363,15 +363,37 @@ public class OCRFloating extends Service {
                 wvGoogle.post(new Runnable() {
                     @Override
                     public void run() {
-                        String[] arr = (questionAndOption[1] + " "
-                                + questionAndOption[0]
-                                ).split("[()\"?^ ]");
-                        String question = "";
-                        for (String s: arr) {
-                            question += s + "%20";
+                        if (Constant.SEARCH_TYPE == 1) {
+                            String[] arr = (questionAndOption[1] + " "
+                                    + questionAndOption[0]
+                            ).split("[()\"?^ ]");
+                            String question = "";
+                            for (String s : arr) {
+                                question += s + "%20";
+                            }
+                            wvGoogle.loadUrl("https://google.com/search?q=" + question);
+                            wvGoogle.findAllAsync(questionAndOption[1]);
+                        } else if (Constant.SEARCH_TYPE == 2) {
+                            String[] arr = (questionAndOption[2] + " "
+                                    + questionAndOption[0]
+                            ).split("[()\"?^ ]");
+                            String question = "";
+                            for (String s : arr) {
+                                question += s + "%20";
+                            }
+                            wvGoogle.loadUrl("https://google.com/search?q=" + question);
+                            wvGoogle.findAllAsync(questionAndOption[2]);
+                        } else {
+                            String[] arr = (questionAndOption[3] + " "
+                                    + questionAndOption[0]
+                            ).split("[()\"?^ ]");
+                            String question = "";
+                            for (String s : arr) {
+                                question += s + "%20";
+                            }
+                            wvGoogle.loadUrl("https://google.com/search?q=" + question);
+                            wvGoogle.findAllAsync(questionAndOption[3]);
                         }
-                        wvGoogle.loadUrl("https://google.com/search?q=" + question);
-                        wvGoogle.findAllAsync(questionAndOption[1]);
                     }
                 });
             }

@@ -109,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
         startStopBtnLegacy = findViewById(R.id.start5);
         ocrBtn = findViewById(R.id.ocr_btn5);
 
-        mOCRBtn4=findViewById(R.id.ocr_btn5_4);
+//        mOCRBtn4=findViewById(R.id.ocr_btn5_4);
         rgSearchType = findViewById(R.id.rgSearchType);
         rgSearchType.check(1);
         rgSearchType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
+                Constant.SEARCH_TYPE = checkedId;
             }
         });
 
@@ -142,18 +142,18 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-            mOCRBtn4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isServiceRunning(OCRFloating4.class)) {
-                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR=false;
-                        stopService(new Intent(MainActivity.this, OCRFloating4.class));
-                    } else {
-                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR=true;
-                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    }
-                }
-            });
+//            mOCRBtn4.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (isServiceRunning(OCRFloating4.class)) {
+//                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR=false;
+//                        stopService(new Intent(MainActivity.this, OCRFloating4.class));
+//                    } else {
+//                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR=true;
+//                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+//                    }
+//                }
+//            });
 
         } else {
             ocrBtn.setVisibility(View.GONE);
@@ -393,8 +393,8 @@ public class MainActivity extends AppCompatActivity {
             mOCRBtn4.setText(R.string.ocr_btn_txt_stop);
             mOCRBtn4.setBackgroundColor(getResources().getColor(R.color.btnred));
         } else {
-            mOCRBtn4.setText(R.string.ocr_btn_txt_4);
-            mOCRBtn4.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+//            mOCRBtn4.setText(R.string.ocr_btn_txt_4);
+//            mOCRBtn4.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
         }
         super.onResume();
     }

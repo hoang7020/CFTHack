@@ -62,4 +62,6 @@ public class Constant {
     public static final String FAST_MODE_OCR="fast_mode_key";
     public static final String LANGUAGE_FOR_TESSERACT_OCR="language_for_tesseract";
     public static final String IS_GRAYSCALE_IMAGE="grayscale_image_ocr";
+
+    public static int SEARCH_TYPE = 1;
 }
