@@ -45,6 +45,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,12 +57,25 @@ import android.widget.Toast;
 
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +87,7 @@ import ai.loko.hk.ui.activities.SettingsActivity;
 import ai.loko.hk.ui.constants.Constant;
 import ai.loko.hk.ui.data.Data;
 import ai.loko.hk.ui.discord.DiscordBot;
+import ai.loko.hk.ui.model.User;
 import ai.loko.hk.ui.services.Floating;
 import ai.loko.hk.ui.services.OCRFloating;
 import ai.loko.hk.ui.services.option4.OCRFloating4;
@@ -92,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mOverlayPermmissionBtn, mAccessibilityPermissionBtn, startStopBtnLegacy, ocrBtn;
     private Button mOCRBtn4;
     private RadioGroup rgSearchType;
+    private Gson gson;
+    private boolean isAuth = false;
 
 
     @Override
@@ -135,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     if (isServiceRunning(OCRFloating.class)) {
                         stopService(new Intent(MainActivity.this, OCRFloating.class));
                     } else {
-                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR=false;
+                        Data.IS_THIS_REQUEST_FOR_OPTION_FOUR = false;
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                     }
                 }
@@ -161,6 +178,49 @@ public class MainActivity extends AppCompatActivity {
         }
 
         givePermission();
+
+        gson = new Gson();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        User user = new User(1, "Minh Hoang", "866051035120340");
+//        db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            try {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    JSONObject object = new JSONObject(document.getData());
+                                    if (object.getString("imei").equals(getUniqueIMEIId(MainActivity.this))) {
+                                        isAuth = true;
+                                    }
+                                }
+                                if (isAuth == false) {
+                                    System.exit(1);
+                                }
+                            } catch (Exception ex) {
+                                Log.e(TAG, "onComplete: " + ex.getMessage());
+                            }
+                        } else {
+                            Log.e(TAG, "onComplete: " + task.getException());
+                        }
+                    }
+                });
+        Log.e(TAG, "onCreate: " + getUniqueIMEIId(this));
     }
 
     private void checkForUpdates() {
@@ -177,7 +237,8 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.SYSTEM_ALERT_WINDOW,
                         Manifest.permission.INTERNET,
-                        Manifest.permission.GET_TASKS
+                        Manifest.permission.GET_TASKS,
+                        Manifest.permission.READ_PHONE_STATE
                 },
                 296);
     }
@@ -450,5 +511,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public static String getUniqueIMEIId(Context context) {
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return "";
+            }
+            String imei = telephonyManager.getDeviceId();
+            Log.e("imei", "=" + imei);
+            if (imei != null && !imei.isEmpty()) {
+                return imei;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "not_found";
     }
 }

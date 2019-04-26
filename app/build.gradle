@@ -121,7 +121,13 @@ dependencies {
     implementation 'com.rabbitmq:amqp-client:5.7.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'net.dv8tion:JDA:4.ALPHA.0_74'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    //    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 /*tasks setOutputName(){
     android.applicationVariants.all{

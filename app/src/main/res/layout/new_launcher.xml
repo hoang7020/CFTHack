@@ -113,6 +113,11 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:text="Q + ABC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Q + A" />
@@ -128,10 +133,6 @@
                 android:text="Q + C" />
         </RadioGroup>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save" />
     </LinearLayout>
 
     <Button

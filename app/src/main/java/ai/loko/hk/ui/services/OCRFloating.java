@@ -365,18 +365,30 @@ public class OCRFloating extends Service {
                     public void run() {
                         if (Constant.SEARCH_TYPE == 1) {
                             String[] arr = (questionAndOption[1] + " "
+                                    + questionAndOption[2] + " "
+                                    + questionAndOption[3] + " "
                                     + questionAndOption[0]
-                            ).split("[()\"?^ ]");
+                            ).split("[,!-.;/\\?@ #\"()]");
+                            String question = "";
+                            for (String s : arr) {
+                                question += s + "%20";
+                            }
+                            wvGoogle.loadUrl("https://google.com/search?q=" + question);
+                        }
+                        else if (Constant.SEARCH_TYPE == 2) {
+                            String[] arr = (questionAndOption[1] + " "
+                                    + questionAndOption[0]
+                            ).split("[,!-.;/\\?@ #\"()]");
                             String question = "";
                             for (String s : arr) {
                                 question += s + "%20";
                             }
                             wvGoogle.loadUrl("https://google.com/search?q=" + question);
                             wvGoogle.findAllAsync(questionAndOption[1]);
-                        } else if (Constant.SEARCH_TYPE == 2) {
+                        } else if (Constant.SEARCH_TYPE == 3) {
                             String[] arr = (questionAndOption[2] + " "
                                     + questionAndOption[0]
-                            ).split("[()\"?^ ]");
+                            ).split("[,!-.;/\\?@ #\"()]");
                             String question = "";
                             for (String s : arr) {
                                 question += s + "%20";
@@ -386,7 +398,7 @@ public class OCRFloating extends Service {
                         } else {
                             String[] arr = (questionAndOption[3] + " "
                                     + questionAndOption[0]
-                            ).split("[()\"?^ ]");
+                            ).split("[,!-.;/\\?@ #\"()]");
                             String question = "";
                             for (String s : arr) {
                                 question += s + "%20";
