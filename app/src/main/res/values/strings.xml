@@ -27,7 +27,7 @@
   -->
 
 <resources>
-    <string name="app_name">TH Group B</string>
+    <string name="app_name">TH Group A</string>
     <string name="accessibility_desc">The usage of accessibility service for reading Question and Options from the app screen when these are appear to users.\n</string>
     <string name="desc">How to use: First take the screenshot of live question and crop the question and option using this app</string>
     <string name="title_activity_settings">Settings</string>
